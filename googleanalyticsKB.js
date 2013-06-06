@@ -37,6 +37,7 @@ $(document).ready(function(){
     }    
   };
   if (agency!==""){
+    _gaq.push(['_trackEvent', 'Agency', agency]);
     _gaq.push(['_setCustomVar',1,'Agency',agency]);
   }    
   if (collection!==""){
