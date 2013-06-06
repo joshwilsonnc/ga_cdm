@@ -32,14 +32,21 @@ $(document).ready(function(){
       break;
     }
     else {
+      //Most browsers
       try{if(rows[i].childNodes[1].textContent&&(/Agency/.test(rows[i].childNodes[1].textContent))){agency=rows[i].childNodes[3].textContent.trim();done++;}}catch(e){}
       try{if(rows[i].childNodes[1].textContent&&(/Digital Collection/.test(rows[i].childNodes[1].textContent))){collection=rows[i].childNodes[3].textContent.trim();done++;}}catch(e){}
+      //IE8
+      try{if(rows[i].childNodes[0].innerText&&(/Agency/.test(rows[i].childNodes[0].innerText))){agency=$.trim(rows[i].childNodes[1].innerText);done++;}}catch(e){}
+      try{if(rows[i].childNodes[0].innerText&&(/Digital Collection/.test(rows[i].childNodes[0].innerText))){collection=$.trim(rows[i].childNodes[1].innerText);done++;}}catch(e){}
     }    
   };
   if (agency!==""){
     _gaq.push(['_trackEvent', 'Agency', agency]);
     _gaq.push(['_setCustomVar',1,'Agency',agency]);
   }    
+  else {
+    console.log("IE debug: agency not set");
+  }
   if (collection!==""){
     var collStr=''; var patt = /[a-z][A-Z]/g; var bp; var strIndex=0;
     while ((bp = patt.exec(collection)) != null) {
