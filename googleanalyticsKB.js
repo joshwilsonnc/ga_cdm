@@ -1,18 +1,28 @@
 /**
  * TODOs
- * 
- * Deal with length issue. field name plus data cannot exceed 128 chars. Example of breaking:
- * http://digital.ncdcr.gov/cdm/compoundobject/collection/p249901coll22/id/85451/rec/2
- * This limit applies to custom variables only, but let's just keep the events short, too, eh?
- * 
- * Break out multi-part agencies or collections into separate events/variables?
- * 
- * re-test whether the setDomainName nonsense is working across browsers, and with the events, etc.
- * 
- * plug-and-play version for sharing, plus a readme
- * minimized version
+ * Variables that exceed 128 characters (name+value) just don't record. 
+ * These should be truncated instead
  * 
  */
+
+////////////////////////////////////////////////////////////////////////////////////
+// ADD FIELDS YOU WANT TO TRACK TO THIS ARRAY
+// - 5 max (limited by GA custom variable slots)
+// - Each line corresponds to a custom variable slot
+// -- be sure to retain their postion if you add new ones
+// - Leave blank ('') if you aren't using that slot
+// - if length of field name + value exceeds 128 characters, value will be truncated
+////////////////////////////////////////////////////////////////////////////////////
+var trackTheseFields = [
+  'Agency',
+  'Digital Collection',
+  '',
+  '',
+  ''
+];
+////////////////////////////////////////////////////////////////////////////////////
+var customVarArray = new Array(trackTheseFields.length);
+var trackedFieldIndex;
 
 //Standard GA initial calls
 var _gaq = _gaq || [];
@@ -56,43 +66,55 @@ _gaq.push(function() {
  * CONTENTdm's page structure. There's probably a more clever way to do this. * 
  */
 $(document).ready(function(){
-  var agency="", collection="";  
-  var rows=document.getElementsByTagName("tr");
-  var done=0;
-  for(var i=0;i<rows.length;i++){
-    if (done===2) {
-      //Try to reduce the amount of time spent looping through metadata elements
-      //by flagging when the desired fields have been found and breaking.
+  var rows = document.getElementsByTagName("tr");
+  var done = 0;
+  for(var i=0;i<rows.length;i++){    
+    //Try to reduce the amount of time spent looping through metadata elements
+    //by flagging when the desired fields have been found. If we've matched all
+    //fields we were after, we can break.
+    if (done === trackTheseFields.length) {
       break;
     }
-    else {     
-      //Need to wrap element checks in try/catch structure to prevent the code from
-      //failing badly when child elements don't exist
-      //Most browsers
-      try{if(rows[i].childNodes[1].textContent&&(/Agency/.test(rows[i].childNodes[1].textContent))){agency=rows[i].childNodes[3].textContent.trim();done++;}}catch(e){}
-      try{if(rows[i].childNodes[1].textContent&&(/Digital Collection/.test(rows[i].childNodes[1].textContent))){collection=rows[i].childNodes[3].textContent.trim();done++;}}catch(e){}
-      //IE8
-      //- page structure renders slightly differently
-      //- supports innerText instead of textContent
-      //- doesn't support trim()
-      try{if(rows[i].childNodes[0].innerText&&(/Agency/.test(rows[i].childNodes[0].innerText))){agency=$.trim(rows[i].childNodes[1].innerText);done++;}}catch(e){}
-      try{if(rows[i].childNodes[0].innerText&&(/Digital Collection/.test(rows[i].childNodes[0].innerText))){collection=$.trim(rows[i].childNodes[1].innerText);done++;}}catch(e){}
-    }    
+    else {
+      //check this element for a match in the trackTheseFields array
+      for (trackedFieldIndex=0; trackedFieldIndex<trackTheseFields.length; trackedFieldIndex++) {
+        if (trackTheseFields[trackedFieldIndex] !== '') {
+          //Need to wrap element checks in try/catch structure to prevent the code from
+          //failing badly when child elements don't exist
+
+          // Most browsers
+          try {
+            if (rows[i].childNodes[1].textContent &&
+               (rows[i].childNodes[1].textContent.indexOf(trackTheseFields[trackedFieldIndex]) >= 0)) {
+                 customVarArray[trackedFieldIndex] = rows[i].childNodes[3].textContent.trim();
+                 _gaq.push(['_trackEvent', trackTheseFields[trackedFieldIndex], customVarArray[trackedFieldIndex]]);
+                 done++;
+            }
+          } catch(e) {}  
+
+          //IE8
+          //- page structure renders slightly differently
+          //- supports innerText instead of textContent
+          //- doesn't support trim()
+          try {
+            if (rows[i].childNodes[0].innerText &&
+               (rows[i].childNodes[0].innerText.indexOf(trackTheseFields[trackedFieldIndex]) >= 0)) {
+                 customVarArray[trackedFieldIndex] = $.trim(rows[i].childNodes[1].innerText);
+                 _gaq.push(['_trackEvent', trackTheseFields[trackedFieldIndex], customVarArray[trackedFieldIndex]]);
+                 done++;
+            }
+          } catch(e) {}          
+        }
+      }
+    }
   };
-  //Record events
-  if (agency!==""){
-    _gaq.push(['_trackEvent', 'Agency', agency]);
-  }
-  if (collection!==""){
-    _gaq.push(['_trackEvent', 'Collection', collection]);
-  }  
   //Record variables - need to do this after events to avoid duplicated reporting
-  if (agency!==""){
-    _gaq.push(['_setCustomVar',1,'Agency',agency]);
+  //Loop through customVar array, report any values found in corresponding slot
+  for(trackedFieldIndex=0; trackedFieldIndex<customVarArray.length; trackedFieldIndex++){ 
+    if (customVarArray[trackedFieldIndex]) {
+      _gaq.push(['_setCustomVar', trackedFieldIndex+1, trackTheseFields[trackedFieldIndex], customVarArray[trackedFieldIndex]]);
+    }    
   }
-  if (collection!==""){
-    _gaq.push(['_setCustomVar',2,'Collection',collection]);
-  }  
   
   //Finally, add trackPageview to the gaq command queue
   //Needs to be in the .ready() block to ensure proper timing
