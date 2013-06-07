@@ -1,5 +1,31 @@
+/**
+ * TODOs
+ * 
+ * Deal with length issue. field name plus data cannot exceed 128 chars. Example of breaking:
+ * http://digital.ncdcr.gov/cdm/compoundobject/collection/p249901coll22/id/85451/rec/2
+ * This limit applies to custom variables only, but let's just keep the events short, too, eh?
+ * 
+ * Break out multi-part agencies or collections into separate events/variables?
+ * 
+ * document everything, in fact
+ * 
+ * what the hell does this line do?
+ *   pageTracker = _gat._getTrackerByName('UA-1152148-35');
+ * my guess is nothing, it looks like legacy code to me
+ * if it's working with Addthis, it probably needs an update
+ * 
+ * re-test whether the setDomainName nonsense is working across browsers, and with the events, etc.
+ * 
+ * plug-and-play version for sharing, plus a readme
+ * minimized version
+ * 
+ * This could actually be a presentation, dudes
+ * 
+ */
+
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-1152148-35']);
+
 if (location.host==='digital.ncdcr.gov') {
   _gaq.push(['_setDomainName', 'ncdcr.gov']);
 } else if (location.host==='cdm16062.contentdm.oclc.org') {
@@ -43,18 +69,10 @@ $(document).ready(function(){
   if (agency!==""){
     _gaq.push(['_trackEvent', 'Agency', agency]);
     _gaq.push(['_setCustomVar',1,'Agency',agency]);
-  }    
-  else {
-    console.log("IE debug: agency not set");
   }
   if (collection!==""){
-    var collStr=''; var patt = /[a-z][A-Z]/g; var bp; var strIndex=0;
-    while ((bp = patt.exec(collection)) != null) {
-      collStr += collection.substring(strIndex, bp.index+1) + ';';
-      strIndex = bp.index+1;
-    } 
-    collStr += collection.substring(strIndex, collection.length);
-    _gaq.push(['_setCustomVar',2,'Collection',collStr]);
+    _gaq.push(['_trackEvent', 'Collection', collection]);
+    _gaq.push(['_setCustomVar',2,'Collection',collection]);
   }  
   
   _gaq.push(['_trackPageview']); 
