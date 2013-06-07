@@ -53,8 +53,7 @@ _gaq.push(function() {
  * Basic idea is to grab all TR elements, look through them for desired metadata fields.
  * Once you find it, the actual value of the field is located nearby.
  * This is somewhat volatile and would probably need an update if anything changed in
- * CONTENTdm's page structure. There's probably a more clever way to do this.
- * 
+ * CONTENTdm's page structure. There's probably a more clever way to do this. * 
  */
 $(document).ready(function(){
   var agency="", collection="";  
