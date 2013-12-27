@@ -37,7 +37,7 @@ if (location.host==='digital.ncdcr.gov') {
 }
 _gaq.push(['_setAllowLinker', true]);
 
-//AddThis tracking
+//AddThis tracking - delete this block if not using
 var pageTracker = [];
 var addthis_config = [];
 _gaq.push(function() {
@@ -47,6 +47,7 @@ _gaq.push(function() {
       data_track_clickback: true
     };
 });
+//end AddThis
 
 //Standard GA ga.js loading
 (function() {
@@ -119,4 +120,4 @@ $(document).ready(function(){
   //Finally, add trackPageview to the gaq command queue
   //Needs to be in the .ready() block to ensure proper timing
   _gaq.push(['_trackPageview']); 
-})
+});
