@@ -20,6 +20,7 @@
  * Remove custom variables -
  *  - they aren't really being used and aren't available in analytics.js
  *  - this also removes the limitation on number of custom fields
+ * Better way to locate metadata fields?
  */
 
 ////////////////////////////////////////////////////////////////////////////////////
