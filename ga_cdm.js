@@ -1,8 +1,25 @@
 /**
- * TODOs
- * Variables that exceed 128 characters (name+value) don't record; these should be truncated
- * Remove custom variables and limitation of tracked fields
+ * GOOGLE ANALYTICS METADATA TRACKING FOR CONTENTDM 6
+ * Josh Wilson, State Library of North Carolina, josh.wilson@ncdcr.gov
  * 
+ * This script allows you do define CONTENTdm 6 metadata fields you want tracked in
+ * Google Analytics. For example, you might have a field that contains the Agency
+ * responsible for the document, and you'd like to get usage data by Agency. 
+ * 
+ * Fields are tracked as Events:
+ *  - Name of the field will appear as a Category
+ *  - Value of the field appears as an Action 
+ *    --(you can drill down from Category on the GA Top Events report)
+ *    
+ * Configuration instructions below.
+ * 
+ * 
+ * TODOs
+ * Analytics.js support
+ * Variables that exceed 128 characters (name+value) don't record; these should be truncated
+ * Remove custom variables -
+ *  - they aren't really being used and aren't available in analytics.js
+ *  - this also removes the limitation on number of custom fields
  */
 
 ////////////////////////////////////////////////////////////////////////////////////
