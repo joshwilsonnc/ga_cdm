@@ -1,7 +1,7 @@
 /**
  * TODOs
- * Variables that exceed 128 characters (name+value) just don't record. 
- * These should be truncated instead
+ * Variables that exceed 128 characters (name+value) don't record; these should be truncated
+ * Remove custom variables and limitation of tracked fields
  * 
  */
 
