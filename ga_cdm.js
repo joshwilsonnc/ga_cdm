@@ -7,36 +7,27 @@
  * responsible for the document, and you'd like to get usage data by Agency. 
  * 
  * Fields are tracked as Events:
- *  - Name of the field will appear as a Category
- *  - Value of the field appears as an Action 
+ *  - Event Category default is defined below, but you can change it
+ *  - Field name will be recorded as an Event Action 
+ *  - Field value will be recorded as Event Label
  *    --(you can drill down from Category on the GA Top Events report)
  *    
  * Configuration instructions below.
  * 
  * 
  * TODOs
+ * Better Category/Action/Label implementation
+ * More precise comparison to avoid false positives on similar field names
  * Analytics.js support
- * Variables that exceed 128 characters (name+value) don't record; these should be truncated
- * Remove custom variables -
- *  - they aren't really being used and aren't available in analytics.js
- *  - this also removes the limitation on number of custom fields
- * Better way to locate metadata fields?
  */
 
 ////////////////////////////////////////////////////////////////////////////////////
-// ADD FIELDS YOU WANT TO TRACK TO THIS ARRAY
-// - 5 max (limited by GA custom variable slots)
-// - Each line corresponds to a custom variable slot
-// -- be sure to retain their postion if you add new ones
-// - Leave blank ('') if you aren't using that slot
-// - if length of field name + value exceeds 128 characters, value will be truncated
+// ADD METADATA FIELDS YOU WANT TO TRACK TO THIS ARRAY
 ////////////////////////////////////////////////////////////////////////////////////
+var category = 'Pageview by metadata field';
 var trackTheseFields = [
   'Agency',
-  'Digital Collection',
-  '',
-  '',
-  ''
+  'Digital Collection'
 ];
 ////////////////////////////////////////////////////////////////////////////////////
 // SET YOUR GOOGLE ANALYTICS ACCOUNT AND DOMAIN(S) HERE
@@ -112,7 +103,7 @@ $(document).ready(function(){
             if (rows[i].textContent &&
                (rows[i].textContent.indexOf(trackTheseFields[trackedFieldIndex]) >= 0)) {
                  customVarArray[trackedFieldIndex] = rows[i].nextElementSibling.textContent.trim();
-                 _gaq.push(['_trackEvent', trackTheseFields[trackedFieldIndex], customVarArray[trackedFieldIndex]]);
+                 _gaq.push(['_trackEvent', category, trackTheseFields[trackedFieldIndex], customVarArray[trackedFieldIndex]]);
                  done++;
             }
           } catch(e) {}  
@@ -133,13 +124,6 @@ $(document).ready(function(){
       }
     }
   };
-  //Record variables - need to do this after events to avoid duplicated reporting
-  //Loop through customVar array, report any values found in corresponding slot
-  for(trackedFieldIndex=0; trackedFieldIndex<customVarArray.length; trackedFieldIndex++){ 
-    if (customVarArray[trackedFieldIndex]) {
-      _gaq.push(['_setCustomVar', trackedFieldIndex+1, trackTheseFields[trackedFieldIndex], customVarArray[trackedFieldIndex]]);
-    }    
-  }
   
   //Finally, add trackPageview to the gaq command queue
   //Needs to be in the .ready() block to ensure proper timing
