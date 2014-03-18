@@ -49,7 +49,7 @@ var trackTheseFields = [
 ////////////////////////////////////////////////////////////////////////////////////
 var gaAccount = 'UA-1-1';
 var digitalCollectionsDomain = 'my.site.com';
-var hostedAliasDomain = 'change.if.applicable.otherwise.ignore.com';
+var hostedAliasDomain = 'change.if.applicable.otherwise.ignore';
 ////////////////////////////////////////////////////////////////////////////////////
 
 var customVarArray = new Array(trackTheseFields.length);
@@ -59,7 +59,7 @@ var trackedFieldIndex;
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', gaAccount]);
 
-if (hostedAliasDomain !== 'change.if.applicable.otherwise.ignore.com') {
+if (hostedAliasDomain !== 'change.if.applicable.otherwise.ignore') {
   _gaq.push(['_setDomainName', digitalCollectionsDomain]);
 }
 else {
@@ -84,13 +84,14 @@ else {
  * (jQuery is used by CONTENTdm, so it's available). Timing is important, CONTENTdm
  * pages can load slowly.
  * 
- * Basic idea is to grab all TR elements, look through them for desired metadata fields.
- * Once you find it, the actual value of the field is located nearby.
- * This is somewhat volatile and would probably need an update if anything changed in
- * CONTENTdm's page structure. There's probably a more clever way to do this. * 
+ * Basic idea is to grab all "description_col1"-class elements, look through them
+ * for desired metadata fields. Once you find it, the actual value of the field 
+ * is located nearby. This is somewhat volatile and will need an update when 
+ * anything changes in CONTENTdm's page structure. Could be a more clever way 
+ * to do this. 
  */
 $(document).ready(function(){
-  var rows = document.getElementsByTagName("tr");
+  var rows = document.getElementsByClassName("description_col1");
   var done = 0;
   for(var i=0;i<rows.length;i++){    
     //Try to reduce the amount of time spent looping through metadata elements
@@ -106,11 +107,11 @@ $(document).ready(function(){
           //Need to wrap element checks in try/catch structure to prevent the code from
           //failing badly when child elements don't exist
 
-          // Most browsers
+          //Most browsers
           try {
-            if (rows[i].childNodes[1].textContent &&
-               (rows[i].childNodes[1].textContent.indexOf(trackTheseFields[trackedFieldIndex]) >= 0)) {
-                 customVarArray[trackedFieldIndex] = rows[i].childNodes[3].textContent.trim();
+            if (rows[i].textContent &&
+               (rows[i].textContent.indexOf(trackTheseFields[trackedFieldIndex]) >= 0)) {
+                 customVarArray[trackedFieldIndex] = rows[i].nextElementSibling.textContent.trim();
                  _gaq.push(['_trackEvent', trackTheseFields[trackedFieldIndex], customVarArray[trackedFieldIndex]]);
                  done++;
             }
@@ -119,11 +120,11 @@ $(document).ready(function(){
           //IE8
           //- page structure renders slightly differently
           //- supports innerText instead of textContent
-          //- doesn't support trim()
+          //- doesn't work correctly with JS trim(), uses jQuery's version instead
           try {
-            if (rows[i].childNodes[0].innerText &&
-               (rows[i].childNodes[0].innerText.indexOf(trackTheseFields[trackedFieldIndex]) >= 0)) {
-                 customVarArray[trackedFieldIndex] = $.trim(rows[i].childNodes[1].innerText);
+            if (rows[i].innerText &&
+               (rows[i].innerText.indexOf(trackTheseFields[trackedFieldIndex]) >= 0)) {
+                 customVarArray[trackedFieldIndex] = $.trim(rows[i].nextElementSibling.innerText);
                  _gaq.push(['_trackEvent', trackTheseFields[trackedFieldIndex], customVarArray[trackedFieldIndex]]);
                  done++;
             }
