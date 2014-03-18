@@ -16,8 +16,8 @@
  * 
  * 
  * TODOs
- * Better Category/Action/Label implementation
- * More precise comparison to avoid false positives on similar field names
+ * More precise field name comparison to avoid false positives on similar names
+ * Confirm setDomain, setAllowLinker working properly
  * Analytics.js support
  */
 
@@ -43,8 +43,8 @@ var digitalCollectionsDomain = 'my.site.com';
 var hostedAliasDomain = 'change.if.applicable.otherwise.ignore';
 ////////////////////////////////////////////////////////////////////////////////////
 
-var customVarArray = new Array(trackTheseFields.length);
 var trackedFieldIndex;
+var label;
 
 //Standard GA initial calls
 var _gaq = _gaq || [];
@@ -102,8 +102,8 @@ $(document).ready(function(){
           try {
             if (rows[i].textContent &&
                (rows[i].textContent.indexOf(trackTheseFields[trackedFieldIndex]) >= 0)) {
-                 customVarArray[trackedFieldIndex] = rows[i].nextElementSibling.textContent.trim();
-                 _gaq.push(['_trackEvent', category, trackTheseFields[trackedFieldIndex], customVarArray[trackedFieldIndex]]);
+                 label = rows[i].nextElementSibling.textContent.trim();
+                 _gaq.push(['_trackEvent', category, trackTheseFields[trackedFieldIndex], label]);
                  done++;
             }
           } catch(e) {}  
@@ -115,8 +115,8 @@ $(document).ready(function(){
           try {
             if (rows[i].innerText &&
                (rows[i].innerText.indexOf(trackTheseFields[trackedFieldIndex]) >= 0)) {
-                 customVarArray[trackedFieldIndex] = $.trim(rows[i].nextElementSibling.innerText);
-                 _gaq.push(['_trackEvent', trackTheseFields[trackedFieldIndex], customVarArray[trackedFieldIndex]]);
+                 label = $.trim(rows[i].nextElementSibling.innerText);
+                 _gaq.push(['_trackEvent', trackTheseFields[trackedFieldIndex], label]);
                  done++;
             }
           } catch(e) {}          
