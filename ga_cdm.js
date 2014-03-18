@@ -75,11 +75,12 @@ else {
  * (jQuery is used by CONTENTdm, so it's available). Timing is important, CONTENTdm
  * pages can load slowly.
  * 
- * Basic idea is to grab all "description_col1"-class elements, look through them
- * for desired metadata fields. Once you find it, the actual value of the field 
+ * Basic idea is to grab all "description_col1"-class elements, which represent 
+ * the metadata field names, then look through them
+ * for desired metadata fields. Once you find them, the actual value of the field 
  * is located nearby. This is somewhat volatile and will need an update when 
- * anything changes in CONTENTdm's page structure. Could be a more clever way 
- * to do this. 
+ * anything changes in CONTENTdm's page structure. Could be a more clever/robust
+ * way to do this. 
  */
 $(document).ready(function(){
   var rows = document.getElementsByClassName("description_col1");
