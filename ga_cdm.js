@@ -49,15 +49,17 @@ var label;
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', gaAccount]);
 
-//Check if hosted domain could be a possible location
+//Set domain name correctly for hosted instances, depending on location
 if (hostedAliasDomain !== 'change.if.applicable.otherwise.ignore') {
   //Depending on referrer, visitors might have either of these two domain names
   //Need to allow for either or GA will ignore tracking if domain name doesn't match code
-  if (location.host===digitalCollectionsDomain) {
-    _gaq.push(['_setDomainName', digitalCollectionsDomain]);
-  } else if (location.host===hostedAliasDomain) {
+  if (location.host===hostedAliasDomain) {
+    //if the specified hostedAliasDomain matches the current domain, set it
+    //otherwise use the default domain
     _gaq.push(['_setDomainName', hostedAliasDomain]);
-  }  //Implied that  if location is something unexpected, don't call _setDomainName
+  } else {
+    _gaq.push(['_setDomainName', digitalCollectionsDomain]);
+  }
   _gaq.push(['_setAllowLinker', true]);
 }
 //Standard GA ga.js loading
