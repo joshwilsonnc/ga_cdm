@@ -17,7 +17,6 @@
  * 
  * TODOs
  * More precise field name comparison to avoid false positives on similar names
- * Confirm setDomain, setAllowLinker working properly
  * Analytics.js support
  */
 
@@ -50,10 +49,8 @@ var label;
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', gaAccount]);
 
+//Check if hosted domain could be a possible location
 if (hostedAliasDomain !== 'change.if.applicable.otherwise.ignore') {
-  _gaq.push(['_setDomainName', digitalCollectionsDomain]);
-}
-else {
   //Depending on referrer, visitors might have either of these two domain names
   //Need to allow for either or GA will ignore tracking if domain name doesn't match code
   if (location.host===digitalCollectionsDomain) {
