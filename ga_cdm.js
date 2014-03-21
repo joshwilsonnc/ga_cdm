@@ -6,7 +6,7 @@
  * Google Analytics. For example, you might have a field that contains the Agency
  * responsible for the document, and you'd like to get usage data by Agency. 
  * 
- * Uses ga.js ("Classic Analytics") code. See analyticsjs_cdm.js for newer Universal
+ * Uses ga.js (classic analytics) code. See analyticsjs_cdm.js for newer Universal
  * Analytics version.
  * 
  * Fields are tracked as Events:

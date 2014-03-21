@@ -6,8 +6,8 @@
  * Google Analytics. For example, you might have a field that contains the Agency
  * responsible for the document, and you'd like to get usage data by Agency. 
  * 
- * Uses ga.js ("Classic Analytics") code. See analyticsjs_cdm.js for newer Universal
- * Analytics version.
+ * Uses analytics.js (Universal Analytics) code. See ga_cdm.js for ga.js  
+ * (classic analytics) version.
  * 
  * Fields are tracked as Events:
  *  - Event Category default is defined below, but you can change it
@@ -20,6 +20,7 @@
  * 
  * TODOs
  * More precise field name comparison to avoid false positives on similar names
+ * Cross-domain tracking
  * 
  */
 
@@ -35,42 +36,26 @@ var trackTheseFields = [
 // SET YOUR GOOGLE ANALYTICS ACCOUNT AND DOMAIN(S) HERE
 // gaAccount corresponds to your GA account and property number. 
 //    Looks like 'UA-X-Y' (where X is specific to your account and Y is a property number)
-// digitalCollectionsDomain is wherever your digital collections are set up
-// Hosted instances may have an additional alias URL like cdm######.contentdm.oclc.org
-//    Updated the value for hostedAliasDomain with the correct URL if this 
-//    applies to your institution. Ignore this line otherwise.
 ////////////////////////////////////////////////////////////////////////////////////
 var gaAccount = 'UA-1-1';
-var digitalCollectionsDomain = 'my.site.com';
-var hostedAliasDomain = 'change.if.applicable.otherwise.ignore';
 ////////////////////////////////////////////////////////////////////////////////////
 
 var trackedFieldIndex;
 var label;
 
+
+//Standard GA ga.js loading
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
 //Standard GA initial calls
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', gaAccount]);
+ga('create', gaAccount, 'auto');
 
 //Set domain name correctly for hosted instances, depending on location
-if (hostedAliasDomain !== 'change.if.applicable.otherwise.ignore') {
-  //Depending on referrer, visitors might have either of these two domain names
-  //Need to allow for either or GA will ignore tracking if domain name doesn't match code
-  if (location.host===hostedAliasDomain) {
-    //if the specified hostedAliasDomain matches the current domain, set it
-    //otherwise use the default domain
-    _gaq.push(['_setDomainName', hostedAliasDomain]);
-  } else {
-    _gaq.push(['_setDomainName', digitalCollectionsDomain]);
-  }
-  _gaq.push(['_setAllowLinker', true]);
-}
-//Standard GA ga.js loading
-(function() {
-  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
+//TODO
+
 
 /**
  * Use jQuery .ready() method to set the remainder to run after DOM is loaded
@@ -106,7 +91,7 @@ $(document).ready(function(){
             if (rows[i].textContent &&
                (rows[i].textContent.indexOf(trackTheseFields[trackedFieldIndex]) >= 0)) {
                  label = rows[i].nextElementSibling.textContent.trim();
-                 _gaq.push(['_trackEvent', category, trackTheseFields[trackedFieldIndex], label]);
+                 ga('send', 'event', category, trackTheseFields[trackedFieldIndex], label);
                  done++;
             }
           } catch(e) {}  
@@ -119,7 +104,7 @@ $(document).ready(function(){
             if (rows[i].innerText &&
                (rows[i].innerText.indexOf(trackTheseFields[trackedFieldIndex]) >= 0)) {
                  label = $.trim(rows[i].nextElementSibling.innerText);
-                 _gaq.push(['_trackEvent', trackTheseFields[trackedFieldIndex], label]);
+                 ga('send', 'event', category, trackTheseFields[trackedFieldIndex], label);
                  done++;
             }
           } catch(e) {}          
@@ -130,5 +115,6 @@ $(document).ready(function(){
   
   //Finally, add trackPageview to the gaq command queue
   //Needs to be in the .ready() block to ensure proper timing
-  _gaq.push(['_trackPageview']); 
+  ga('send', 'pageview');
+
 });
