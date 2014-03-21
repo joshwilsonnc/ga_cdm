@@ -6,8 +6,11 @@
  * Google Analytics. For example, you might have a field that contains the Agency
  * responsible for the document, and you'd like to get usage data by Agency. 
  * 
- * Uses ga.js (classic analytics) code. See analyticsjs_cdm.js for newer Universal
- * Analytics version.
+ * Uses ga.js (classic analytics) code. Be sure to set the metadata fields you 
+ * wish to track by editing the trackTheseFields array below. Also set your GA
+ * account information, domain, and (if applicable) domain alias below.
+ * 
+ * See analyticsjs_cdm.js for newer Universal Analytics version.
  * 
  * Fields are tracked as Events:
  *  - Event Category default is defined below, but you can change it
@@ -15,16 +18,17 @@
  *  - Field value will be recorded as Event Label
  *    --(you can drill down from Category on the GA Top Events report)
  *    
- * Configuration instructions below.
- * 
  *   
  * TODOs
  * More precise field name comparison to avoid false positives on similar names
- * Analytics.js support
  */
 
 ////////////////////////////////////////////////////////////////////////////////////
-// ADD METADATA FIELDS YOU WANT TO TRACK TO THIS ARRAY
+// ADD METADATA FIELDS YOU WANT TO TRACK HERE
+// 
+// Add any metadata fields you wish to track to the trackTheseFields array.
+// 
+// You can optionally change the Category text here as well.
 ////////////////////////////////////////////////////////////////////////////////////
 var category = 'Pageview by metadata field';
 var trackTheseFields = [
@@ -43,6 +47,10 @@ var trackTheseFields = [
 var gaAccount = 'UA-1-1';
 var digitalCollectionsDomain = 'my.site.com';
 var hostedAliasDomain = 'change.if.applicable.otherwise.ignore';
+////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////
+// No changes necessary below this point.
 ////////////////////////////////////////////////////////////////////////////////////
 
 var trackedFieldIndex;
