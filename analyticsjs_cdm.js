@@ -17,10 +17,10 @@
  *    
  * Configuration instructions below.
  * 
- *   
+ * 
  * TODOs
  * More precise field name comparison to avoid false positives on similar names
- * Analytics.js support
+ * 
  */
 
 ////////////////////////////////////////////////////////////////////////////////////
