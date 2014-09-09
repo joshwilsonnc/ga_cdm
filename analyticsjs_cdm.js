@@ -2,6 +2,9 @@
  * GOOGLE ANALYTICS METADATA TRACKING FOR CONTENTDM 6
  * Josh Wilson, State Library of North Carolina, josh.wilson@ncdcr.gov
  * 
+ * Updates this version: greatly simplified, cross-browser compatible code via
+ * more thorough jQuery integration.
+ * 
  * This script allows you do define CONTENTdm 6 metadata fields you want tracked in
  * Google Analytics. For example, you might have a field that contains the Agency
  * responsible for the document, and you'd like to get usage data by Agency. 
@@ -56,15 +59,14 @@ var label;
 $(document).ready(function(){
   var done = 0;
         
-    //loop through all the metadata field elements
-    $(".description_col1").each(function() {
+  //loop through all the metadata field elements
+  $(".description_col1").each(function() {
     //Try to reduce the amount of time spent looping through metadata elements
     //by breaking when the number of desired fields have been found. 
     if (done === trackTheseFields.length) {
       return false;
     }
     else {      
-      //Most browsers
       fieldOfInterest = $.trim($(this).text());
       
       if ($.inArray(fieldOfInterest, trackTheseFields) >= 0) {
