@@ -19,6 +19,8 @@
  *  - Field value will be recorded as Event's Label
  *    --(you can drill down from Category on the GA Top Events report)
  *    
+ * For simplified cross-browser support and syntax, uses jQuery 1.x, which is
+ * loaded in CONTENTdm and is supported in IE 6+.
  * 
  * TODOs
  * More precise field name comparison to avoid false positives on similar names
@@ -41,16 +43,10 @@ var trackTheseFields = [
 // No changes necessary below this point.
 ////////////////////////////////////////////////////////////////////////////////////
 /**
- * Use jQuery .ready() method to set the remainder to run after DOM is loaded
- * (jQuery is used by CONTENTdm, so it's available). Timing is important, CONTENTdm
- * pages can load slowly.
- * 
- * Basic idea is to grab all "description_col1"-class elements, which represent 
- * the metadata field names, then look through them
- * for desired metadata fields. Once you find them, the actual value of the field 
- * is located nearby. This is somewhat volatile and will need an update when 
- * anything changes in CONTENTdm's page structure. Could be a more clever/robust
- * way to do this. 
+ * Grab all "description_col1"-class elements, which represent metadata field names, 
+ * then check for desired fields. Once you find them, the actual value of the field 
+ * is located nearby. This is potentially volatile and will need an update when 
+ * anything changes in CONTENTdm's page structure.
  * 
  * The analytics.js library is assumed to be loaded when this is run. It will be 
  * available if you've enabled Google Analytics via CONTENTdm's Website Configuration
@@ -59,46 +55,26 @@ var trackTheseFields = [
 var trackedFieldIndex;
 var label;
 $(document).ready(function(){
-  var rows = document.getElementsByClassName("description_col1");
   var done = 0;
-  for(var i=0;i<rows.length;i++){    
+        
+    //loop through all the metadata field elements
+    $(".description_col1").each(function() {
     //Try to reduce the amount of time spent looping through metadata elements
-    //by flagging when the desired fields have been found. If we've matched all
-    //fields we were after, we can break.
+    //by breaking when the number of desired fields have been found. 
     if (done === trackTheseFields.length) {
-      break;
+      return false;
     }
-    else {
-      //check this element for a match in the trackTheseFields array
-      for (trackedFieldIndex=0; trackedFieldIndex<trackTheseFields.length; trackedFieldIndex++) {
-        if (trackTheseFields[trackedFieldIndex] !== '') {
-          //Need to wrap element checks in try/catch structure to prevent the code from
-          //failing badly when child elements don't exist
-
-          //Most browsers
-          try {
-            if (rows[i].textContent &&
-               (rows[i].textContent.indexOf(trackTheseFields[trackedFieldIndex]) >= 0)) {
-                 label = rows[i].nextElementSibling.textContent.trim();
-                 ga('send', 'event', category, trackTheseFields[trackedFieldIndex], label);
-                 done++;
-            }
-          } catch(e) {}  
-
-          //IE8
-          //- page structure renders slightly differently
-          //- supports innerText instead of textContent
-          //- doesn't work correctly with JS trim(), uses jQuery's version instead
-          try {
-            if (rows[i].innerText &&
-               (rows[i].innerText.indexOf(trackTheseFields[trackedFieldIndex]) >= 0)) {
-                 label = $.trim(rows[i].nextElementSibling.innerText);
-                 ga('send', 'event', category, trackTheseFields[trackedFieldIndex], label);
-                 done++;
-            }
-          } catch(e) {}          
-        }
+    else {      
+      //Most browsers
+      fieldOfInterest = $.trim($(this).text());
+      
+      if ($.inArray(fieldOfInterest, trackTheseFields) >= 0) {
+        label = $.trim($(this).next().text());
+        ga('send', 'event', category, fieldOfInterest, label);
+        done++;
+        //Uncomment the following line for exciting debugging action:
+        //console.log("category, action, label:" + category + ", " + fieldOfInterest + ", " + label);
       }
-    }
-  };
+    }    
+  });
 });
