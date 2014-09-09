@@ -52,7 +52,6 @@ var trackTheseFields = [
  * available if you've enabled Google Analytics via CONTENTdm's Website Configuration
  * tool.
  */
-var trackedFieldIndex;
 var label;
 $(document).ready(function(){
   var done = 0;

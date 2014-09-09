@@ -1,6 +1,9 @@
 <h4>A custom implementation of Google Analytics for CONTENTdm 6 users 
 that enables recording metadata field values as GA events.</h4>
 
+<em>Updated September 2014: improved jQuery integration for better cross-browser
+compatibility.</em>
+
 
 <h5>ga.js (classic analytics)</h5>
 <p>To configure, edit the ga_cdm.js file</p>
