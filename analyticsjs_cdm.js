@@ -2,6 +2,8 @@
  * GOOGLE ANALYTICS METADATA TRACKING FOR CONTENTDM 6
  * Josh Wilson, State Library of North Carolina, josh.wilson@ncdcr.gov
  * 
+ * Version: 2.0
+ * 
  * Updates this version: greatly simplified, cross-browser compatible code via
  * more thorough jQuery integration.
  * 
@@ -25,15 +27,14 @@
  * For simplified cross-browser support and syntax, uses jQuery 1.x, which is
  * loaded in CONTENTdm and is supported in IE 6+.
  * 
- * TODOs
- * More precise field name comparison to avoid false positives on similar names
- * 
  */
 
 ////////////////////////////////////////////////////////////////////////////////////
 // ADD METADATA FIELDS YOU WANT TO TRACK HERE
 // 
-// Add any metadata fields you wish to track to the trackTheseFields array.
+// Add metadata fields you wish to track to the trackTheseFields array. 
+// 'Agency' and 'Digital Collection' are set in the array as examples.
+// Field names will be matched exactly.
 // 
 // You can optionally change the Category text here as well.
 ////////////////////////////////////////////////////////////////////////////////////
