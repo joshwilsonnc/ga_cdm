@@ -2,7 +2,8 @@
 that enables recording metadata field values as GA events.</h4>
 
 <em>Updated September 2014: improved jQuery integration for better cross-browser
-compatibility.</em>
+compatibility. Set Version to 2.0. Full best compatibility across browsers, be
+sure to use this code version.</em>
 
 
 <h5>ga.js (classic analytics)</h5>
