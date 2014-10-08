@@ -14,6 +14,9 @@ example, in our state publications collections, we utilize an "Agency-Current" f
 contains the name of the state agency that published the item. This code enables us
 to specify which fields we wanted to track, and they are recorded as events.</p>
 
+do this:
+http://stackoverflow.com/questions/10189356/how-to-add-screenshot-to-readmes-in-github-repository
+
 ![Metadata in CONTENTdm](http://joshwilson.net/imgs/ga_cdm_metadata.jpg)
 
 <p>In this example, if I was tracking the "Agency-Current" field, when an item with 
