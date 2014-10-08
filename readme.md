@@ -14,15 +14,12 @@ example, in our state publications collections, we utilize an "Agency-Current" f
 contains the name of the state agency that published the item. This code enables us
 to specify which fields we wanted to track, and they are recorded as events.</p>
 
-do this:
-http://stackoverflow.com/questions/10189356/how-to-add-screenshot-to-readmes-in-github-repository
-
-![Metadata in CONTENTdm](http://joshwilson.net/imgs/ga_cdm_metadata.jpg)
+![Metadata in CONTENTdm](/../<branch name>/images/screenshot_ga_cdm_metadata.jpg?raw=true "Metadata screenshot")
 
 <p>In this example, if I was tracking the "Agency-Current" field, when an item with 
 that field was viewed, an event would be recorded:</p>
 
-![How metadata is recorded in Google Analytics](http://joshwilson.net/imgs/ga_cdm_analytics.jpg)
+![How metadata is recorded in Google Analytics](/../<branch name>/images/screenshot_ga_cdm_analytics.jpg?raw=true "Analytics screenshot")
 
 <p>By default, the event category will be "Pageview by metadata field". The field name will
 be recorded as the event action, and the field value as the event label.</p>
